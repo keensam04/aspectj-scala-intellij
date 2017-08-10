@@ -5,7 +5,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import sample.annotation.SampleAnnotation;
-import sample.component.SampleComponent;
 import sample.component.ScalaComponent;
 
 /**
@@ -16,12 +15,11 @@ import sample.component.ScalaComponent;
 @Aspect
 public class SampleAspect {
 
+    private ScalaComponent component ;
+
     public void setComponent(ScalaComponent component) {
         this.component = component;
     }
-
-    @Autowired
-    private ScalaComponent component ;
 
     @Around(value = "execution(@sample.annotation.SampleAnnotation * *(..)) && @annotation(sampleAnnotation)", argNames = "sampleAnnotation")
     public Object intercept(ProceedingJoinPoint joinPoint, SampleAnnotation sampleAnnotation) throws Throwable {

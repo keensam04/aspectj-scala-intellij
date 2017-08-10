@@ -1,6 +1,5 @@
 package sample.component;
 
-import org.springframework.stereotype.Component;
 import sample.annotation.SampleAnnotation;
 
 /**
@@ -8,7 +7,6 @@ import sample.annotation.SampleAnnotation;
  * Date: 13/02/13
  * Time: 11:59
  */
-@Component("sampleComponent")
 public class SampleComponent {
 
       @SampleAnnotation

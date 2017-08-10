@@ -11,13 +11,13 @@
     <properties>
         <dep.spring>3.2.1.RELEASE</dep.spring>
         <dep.slf4j>1.6.1</dep.slf4j>
-        <dep.junit>4.8.2</dep.junit>
-        <dep.jersey>1.8</dep.jersey>
+        <dep.junit>4.11</dep.junit>
+        <dep.jersey>2.22</dep.jersey>
         <dep.jackson>1.8.5</dep.jackson>
-        <dep.mockito>1.9.0-rc1</dep.mockito>
-        <aspectj.version>1.7.1</aspectj.version>
+        <dep.mockito>1.9.5</dep.mockito>
+        <aspectj.version>1.8.10</aspectj.version>
         <springapi.version>1.0.0</springapi.version>
-        <scala.version>2.10.0</scala.version>
+        <scala.version>2.11.11</scala.version>
     </properties>
 
     <dependencies>
@@ -111,19 +111,12 @@
     </dependencies>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.scala-tools</groupId>
-                    <artifactId>maven-scala-plugin</artifactId>
-                    <version>2.15.2</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.scala-tools</groupId>
-                <artifactId>maven-scala-plugin</artifactId>
+                <!-- see http://davidb.github.com/scala-maven-plugin -->
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>scala-compile-first</id>
@@ -137,26 +130,29 @@
                         <id>scala-test-compile</id>
                         <phase>process-test-resources</phase>
                         <goals>
+                            <goal>add-source</goal>
                             <goal>testCompile</goal>
                         </goals>
+                    </execution>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                        <configuration>
+                            <args>
+                                <!--<arg>-make:transitive</arg>-->
+                                <arg>-dependencyfile</arg>
+                                <arg>${project.build.directory}/.scala_dependencies</arg>
+                            </args>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
-                <version>1.4</version>
+                <version>1.10</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.aspectj</groupId>
@@ -185,68 +181,36 @@
                             <artifactId>spring-aspects</artifactId>
                         </aspectLibrary>
                     </aspectLibraries>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <complianceLevel>1.8</complianceLevel>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
-
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-webdav-jackrabbit</artifactId>
-                <version>1.0-beta-7</version>
-            </extension>
-        </extensions>
     </build>
 
-
-    <pluginRepositories>
-
-        <pluginRepository>
-            <id>scala-tools.org</id>
-            <name>Scala-tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
-        </pluginRepository>
-    </pluginRepositories>
     <repositories>
         <repository>
-            <id>JBOSS</id>
-            <name>JBoss Repository</name>
-            <url>http://repository.jboss.org/maven2/</url>
+            <id>nexus-releases</id>
+            <url>http://nexus.wdf.sap.corp:8081/nexus/content/groups/build.releases/</url>
         </repository>
 
+        <repository>
+            <id>nexus-milestones</id>
+            <url>http://nexus.wdf.sap.corp:8081/nexus/content/groups/build.milestones/</url>
+        </repository>
 
+        <repository>
+            <id>nexus-third-party</id>
+            <url>http://nexus.wdf.sap.corp:8081/nexus/content/groups/build.releases.3rd-party/</url>
+        </repository>
 
         <repository>
-            <id>scala-tools.org</id>
-            <name>Scala-tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
-        </repository>
-        <repository>
-            <id>scala-test.org</id>
-            <name>Scala-test Maven2 Repository</name>
-            <url>https://oss.sonatype.org/content/groups/public/org/scalatest/</url>
-        </repository>
-        <repository>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-                <checksumPolicy>warn</checksumPolicy>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-                <updatePolicy>never</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </snapshots>
-            <id>apache-releases</id>
-            <url>https://repository.apache.org/content/repositories/releases/</url>
-            <layout>default</layout>
-        </repository>
-        <repository>
-            <id>repository.springsource.milestone</id>
-            <name>SpringSource Milestone Repository</name>
-            <url>http://repo.springsource.org/milestone</url>
+            <id>Job Server - Manual Upload - 2</id>
+            <url>
+                http://nexus.wdf.sap.corp:8081/nexus/content/repositories/3rd-party.releases.manual-uploads.all-closed-stages/
+            </url>
         </repository>
     </repositories>
+
 </project>
